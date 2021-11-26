@@ -1,6 +1,6 @@
 ---
 title: Test Note First
-date: 2021-11-24 13:11:30 -0800
+date: 2021-11-24 13:11:30 +0900
 categories: [Test, Note]
 tags: [test test2 test3]     # TAG names should always be lowercase
 comment: true
