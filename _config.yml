@@ -20,12 +20,13 @@ timezone: Asia/Seoul
 
 title: DS's Study Note                       # the main title
 
-tagline: A text-focused Jekyll theme   # it will display as the sub-title
+tagline: First Note for study   # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, portfolio, sidebar,
-  bootstrap Jekyll theme with responsive web design
-  and focuses on text presentation.
+  Just a note to describe my recent study
+  Begun with AI study
+  I will follow up with my Optics research
+  Sometime article review?
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'http://mathg0811.github.io'
