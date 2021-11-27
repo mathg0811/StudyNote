@@ -53,7 +53,7 @@ A Markov process is a memoryless random process
 |---|
 |a *Markov* Process (or *Markov Chain*) is a tuple $\langle\mathcal{S,P}\rangle$<br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{S}}\;$ is a (finite) set of states<br>$\tiny{\blacksquare}\quad\normalsize{\mathcal{P}}\;$ is a state transition probability matrix,<br> $$\quad\mathcal{P}_{ss'}=\mathbb{P}[S_{t+1}=s'\|S_t=s]$$|
 
-### Markov Reward Process
+### Markov Reward Process (MRP)
 
 A Markov reward process is a Markov chain with values
 
@@ -73,3 +73,90 @@ A Markov reward process is a Markov chain with values
   - $\gamma$ close to 0 leads to "myopic" evaluation
   - $\gamma$ close to 1 leads to "far-sighted" evaluation
 - 단순 급수적인 형태로 감가를 시행하고 있지만 경우에 따라서 감가 함수를 별도로 함수로 만들어 사용할 수 있을 듯. 크게 필요한 경우가 있을 진 모르겠지만..
+
+## Value Function
+
+The value function $v(s)$ gives the long-term value of state $s$
+
+|Definition|
+|---|
+|The *state* vlaue function $v(s)$ of an MRP is the expected return starting from state $s$<br> <center>$$\mathsf{v}(s)=\mathbb{E}[G_t\;\|\;S_t=s] $$</center>|
+
+## Bellman Equation for MRPs
+
+The value function can be decomposed into two parts:
+
+- immediate reward $R_{t+1}$
+- discounted value of successor state $\gamma \mathsf{v}(S_{t+1})$
+
+$$\quad\quad\quad\quad\mathsf{v}(s) =\mathbb{E}\,[\,G_t\;\|\;S_t=s\,]$$<br>
+$$\quad\quad\quad\quad\quad\quad=\mathbb{E}\,[\,R_{t+1}+\gamma R_{t+2} + \gamma ^2 R_{t+3} + \dots\;\|\;S_t=s\,]$$<br>
+$$\quad\quad\quad\quad\quad\quad=\mathbb{E}\,[\,R_{t+1}+\gamma (R_{t+2} + \gamma R_{t+3} + \dots)\;\|\;S_t=s\,]$$<br>
+$$\quad\quad\quad\quad\quad\quad=\mathbb{E}\,[\,R_{t+1}+\gamma G_{t+1}\;\|\;S_t=s\,]$$<br>
+$$\quad\quad\quad\quad\quad\quad=\mathbb{E}\,[\,R_{t+1}+\gamma \mathsf{v} (S_{t+1})\;\|\;S_t=s\,]$$<br>
+$$\quad\quad\quad\quad\mathsf{v}(s) =\mathcal{R}_s + \gamma \displaystyle\sum_{s' \in S} ^{}\mathcal{P}_{ss'} \mathsf{v} (s')$$
+
+### Bellman Equation in Matrix Form
+
+The Bellman equation can be expressed concisely using matrices.
+
+$$ \mathsf{v} = \mathcal{R} + \gamma \mathcal{P} \mathsf{v} $$
+
+where $\mathsf{v}$ is a column vector with one entry per state
+
+$$  \begin{bmatrix} \mathsf{v} (1) \\ \vdots \\ \mathsf{v} (n) \end{bmatrix} = \begin{bmatrix} \mathcal{R}_1 \\ \vdots \\ \mathcal{R}_n \end{bmatrix} + \gamma \begin{bmatrix} \mathcal{P}_{11} & \dots & \mathcal{P}_{1n} \\ \vdots & & \\ \mathcal{P}_{n1} & \dots & \mathcal{P}_{nn} \end{bmatrix} \begin{bmatrix} \mathsf{v} (1) \\ \vdots \\ \mathsf{v} (n) \end{bmatrix} $$
+
+각 state 1~n에서의 value function은 각 state의 reward와 dot (각 state로의 확률), (각 state의 value) * discount factor 의 합이다.
+
+### Solving the Bellman Equation
+
+- Linear equation
+
+$$\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad \mathsf{v} = \mathcal{R+ \gamma P}\mathsf{v}$$<br>
+$$\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\; (1 - \gamma \mathcal{P}) \mathsf{v} = \mathcal{R}$$<br>
+$$\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad \mathsf{v} = (1 - \gamma \mathcal{P})^{-1} \mathcal{R}$$
+
+- Computational complexiy is $O(n^3)$ for n state
+- Direct solution only possible for small MRPs
+- There are many iterative methods for large MRPs, e.g.
+  - Dynamic programming
+  - Monte-Carlo evaluation
+  - Temporal-Difference learning
+
+## Markov Decision Process
+
+|Definition|
+|---|
+|a *Markov Reward* Process is a tuple $\langle\mathcal{S, }$<span style="color:red">$\mathcal{A}$</span>$\mathcal{, P, R, \gamma \rangle}$<br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{S}}\;$ is a finite set of states<br>$\tiny{\blacksquare}\quad$ <span style="color:red">$\normalsize{\mathcal{A}}\;$ is a finite set of actions</span><br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{P}}\;$ is a state transition probability matrix,<br> $$\quad\mathcal{P}^a_{ss'}=\mathbb{P}[S_{t+1}=s'\|S_t=s,$$ <span style="color:red">$$A_t =a$$</span>$$]$$ <br> $\tiny{\blacksquare}\quad \normalsize{\mathcal{R}}\;$ is a reward function, $$\mathcal{R}^a_s=\mathbb{E}[R_{t+1} \| S_t=s,$$ <span style="color:red">$$A_t =a$$</span>$$] $$<br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{\gamma}}\;$ is a discount factor, $$\gamma\in[0,1]$$|
+
+## Policies
+
+|Definition|
+|---|
+|A policy $\pi$ is a distribution over actions given states.<br><centor>$$\pi (a\| s) = \mathbb{P} [A_t = a \| S_t = s]$$|
+
+- A policy fully defines the behaviour of an agent
+- MDP policies depend on the current state (not the history)
+- Policies are stationary (time-independent)
+
+$\quad A_t ~ \pi(. \| S_t), \forall t > 0$
+
+- Given an MDP $\mathcal{M = \langle S, A, P ,R ,\gamma \rangle}$ and a policy $ \pi$
+- The state sequence $\mathcal{S_1, S_2, \dots }$ is a Markov process $\mathcal{\langle S, P^{\pi} \rangle}$
+- The state and reward sewuence $\mathcal{S_1, R_2, S_2, \dots}$ is a Markov reward process $\mathcal{\langle S, P^{\pi}, R^{\pi}, \gamma \rangle }$
+- where
+
+<center>
+$$ \mathcal{P^{\pi}_{s, s'}= \displaystyle\sum_{a \in A} \pi (a \| s) P^a_{ss'}}$$
+$$ \mathcal{R^{\pi}_{s}= \displaystyle\sum_{a \in A} \pi (a \| s) R^a_{s}}$$</center>
+
+## Value Function
+
+The state-value function $\mathsf{v_{\pi} (s)} $ of an MDP is the expected return starting from state s, and then following policy $\pi$
+
+$$\mathsf{v_{\pi} (s) = \mathbb{E}_{\pi} [G_t | S_t = s]} $$
+
+The action-value function $\mathsf{q_{\pi} (s,a)}$ is the expected return starting from state s, taking action a, and then following policy $\pi$
+
+$$\mathsf{q_{\pi} (s,a) = \mathbb{e}_{\pi} [G_t | S_t = s, A_t = a] }$$
+
