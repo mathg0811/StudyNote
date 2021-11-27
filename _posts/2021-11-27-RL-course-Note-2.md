@@ -160,3 +160,41 @@ The action-value function $\mathsf{q_{\pi} (s,a)}$ is the expected return starti
 
 $$\mathsf{q_{\pi} (s,a) = \mathbb{e}_{\pi} [G_t | S_t = s, A_t = a] }$$
 
+### Bellman Expectation Equation
+
+The state-value function can again be decomposed into immediate reward plus discounted value of successor state
+
+$$ \mathsf{v_{\pi} (s) = \mathbb{E}_{\pi} [R_{t+1} + \gamma v_{\pi} (S_{t+1}) | S_t = s]}$$
+
+The action-value function can similarly be decomposed
+
+$$ \mathsf{q_{\pi} (s,a) = \mathbb{E}_{\pi}[R_{y+1} + \gamma q_{\pi} (S_{t+1}, A_{t+1}) | S_t = s, A_t=a]} $$
+
+### Bellman Expectation Equation Matrix Form
+
+The Bellman expectation equation can be expressed concisely using the induced MRP
+
+$$ \mathsf{v_{\pi} = \mathcal{R}^{\pi} + \gamma \mathcal{P}^{\pi} v_{\pi}}$$
+
+with direct solution
+
+$$ \mathsf{v_{\pi} = (1- \gamma \mathcal{P}^{\pi})^{-1} \mathcal{R}^{\pi}} $$
+
+### Optimal Value Function
+
+The optimal state-value function $\mathsf{v_* (s)}$ is the maximum value function over all policies
+
+$$ \mathsf{v_* (s) = \displaystyle\max_{\pi} v_{\pi} (s)} $$
+
+The optimal action-value function $\mathsf{a_* (s,a)}$ is the maximum action-value function over all policies
+
+$$ \mathsf{q_* (s,a) = \displaystyle\max_{\pi} q_{\pi} (s,a)} $$
+
+- The optimal value function specifies the best possible performance in the MDP
+- An MDP is "solved" when we know the optimal value fn
+
+### Optimal Policy
+
+Define a partial ordering over policies
+
+$$ \mathsf{\pi \ge \pi ' \quad if \quad v_{\pi} (s) \ge v_{\pi '} (s), \forall s} $$
