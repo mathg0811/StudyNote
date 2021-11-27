@@ -3,7 +3,7 @@ title: RLcourse note2 - Lecture 2 Markov Decision Processes
 author: DS Jung
 date: 2021-11-27 10:00:00 +0900
 categories: [RLcourse, Note]
-tags: [RLcourse, LectureNote]     # TAG names should always be lowercase
+tags: [reinforcementlearning, lecturenote]     # TAG names should always be lowercase
 comment: true
 math: true
 mermail: false
@@ -42,3 +42,4 @@ $$ \mathcal{P}_{ss'}=\mathbb{P}[S_{t+1}=s'|S_t =s] $$
 State transition matrix $\mathcal{P}$ defines transition probabilities from all states $s$ to all successor states $s'$
 
 $$ \mathcal{P} = from \begin{bmatrix} \mathcal{P}_{11}&\dots&\mathcal{P}_{1n}\\ \vdots & & \\ \mathcal{P}_{n1}&\dots&\mathcal{P}_{nn} \end{bmatrix}$$
+
