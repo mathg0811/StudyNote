@@ -43,3 +43,33 @@ State transition matrix $\mathcal{P}$ defines transition probabilities from all 
 
 $$ \mathcal{P} = from \begin{bmatrix} \mathcal{P}_{11}&\dots&\mathcal{P}_{1n}\\ \vdots & & \\ \mathcal{P}_{n1}&\dots&\mathcal{P}_{nn} \end{bmatrix}$$
 
+- state 의 갯수가 n개로 제한된 경우에만 사용하는 건가?
+
+### Markov Process
+
+A Markov process is a memoryless random process
+
+|Definition|
+|---|
+|a *Markov* Process (or *Markov Chain*) is a tuple $\langle\mathcal{S,P}\rangle$<br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{S}}\;$ is a (finite) set of states<br>$\tiny{\blacksquare}\quad\normalsize{\mathcal{P}}\;$ is a state transition probability matrix,<br> $$\quad\mathcal{P}_{ss'}=\mathbb{P}[S_{t+1}=s'\|S_t=s]$$|
+
+### Markov Reward Process
+
+A Markov reward process is a Markov chain with values
+
+|Definition|
+|---|
+|a *Markov Reward* Process is a tuple $\langle\mathcal{S,P,}$<span style="color:red">$\mathcal{R,\gamma}$</span>$\rangle$<br>$\tiny{\blacksquare}\quad \normalsize{\mathcal{S}}\;$ is a (finite) set of states<br>$\tiny{\blacksquare}\quad\normalsize{\mathcal{P}}\;$ is a state transition probability matrix,<br> $$\quad\mathcal{P}_{ss'}=\mathbb{P}[S_{t+1}=s'\|S_t=s]$$ <br> $\tiny{\blacksquare}\quad$ <span style="color:red">$\normalsize{\mathcal{R}}\;$ is a reward function, $$\mathcal{R}_s=\mathbb{E}[R_{t+1} \| S_t=s] $$</span><br>$\tiny{\blacksquare}\quad$ <span style="color:red">$\normalsize{\mathcal{\gamma}}\;$ is a discount factor, $$\gamma\in[0,1]$$</span>|
+
+## Return
+
+|Definition|
+|---|
+|The return $G_t$ is the total discounted reward from tiem-step $t$.<br><center>$$G_t = R_{t+1}+\gamma R_{t+2}+... = \sum_{k=0}^\infty \gamma^k R_{t+k+1}$$</center>|
+
+- The discount $\gamma \in [0,1]$ is the present value of future rewards
+- The value of receiving reward $R$ after $k+1$ time-steps is $\gamma^k R$
+- This values immediate reward above delayed reward
+  - $\gamma$ close to 0 leads to "myopic" evaluation
+  - $\gamma$ close to 1 leads to "far-sighted" evaluation
+- 단순 급수적인 형태로 감가를 시행하고 있지만 경우에 따라서 감가 함수를 별도로 함수로 만들어 사용할 수 있을 듯. 크게 필요한 경우가 있을 진 모르겠지만..
