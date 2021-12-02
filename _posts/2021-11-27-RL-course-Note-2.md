@@ -198,3 +198,116 @@ $$ \mathsf{q_* (s,a) = \displaystyle\max_{\pi} q_{\pi} (s,a)} $$
 Define a partial ordering over policies
 
 $$ \mathsf{\pi \ge \pi ' \quad if \quad v_{\pi} (s) \ge v_{\pi '} (s), \forall s} $$
+
+|Theorem|
+|---|
+|For any Markov Decision Process<br>$\bullet\;$ There exists an optimal policy $\pi$, that is better than or equal to all other policies, $\pi _* \geq  \pi, \forall \pi $<br>$\bullet\;$  All optimal policies achieve the optimal value function, $$\mathsf{v_{\pi_*} (s) = v_* (s)}$$<br>$\bullet\;$  All optimal policies achieve the optimal action-value function, $$\mathsf{q_{\pi_*} (s,a) = q_* (s,a)}$$|
+
+#### Finding an Optimal Policy
+
+An optimal policy can be found by maximising over $$\mathsf{q_* (s,a)}$$
+
+$$ \mathsf{\pi_*(a\vert s)} = \begin{cases} \mathsf{1\quad if \; a = \underset{a\in\mathcal{A}}{argmax} \; q_* (s,a)} \\ \mathsf{0 \quad otherwise} \end{cases}$$
+
+- There is always a deterministic optimal policy for any MDP
+- If we know $\mathsf{q_* (s,a)}$, we immediately have the optimal policy
+
+#### Bellman Optimality Equation
+
+The optimal value functions are recursively related by the Bellman optimality equations:
+
+$$ \mathsf{v_* (s) = \underset{a}{max} \;q_* (s,a)}$$
+
+$$ \mathsf{q_* (s,a) = \mathcal{R}^a_s + \gamma \displaystyle\sum_{s'\in S} \mathcal{P}^a_{ss'} v_* (s')}$$
+
+$$ \mathsf{v_* (s) = \underset{a}{max} \; \mathcal{R}^a_s + \gamma \displaystyle\sum_{s' \in S} \mathcal{P}^a_{ss'}v_* (s')}$$
+
+$$ \mathsf{q_* (s,a) = \mathcal{R}^a_s + \gamma \displaystyle\sum_{s' \in S} \mathcal{P}^a_{ss'} \underset{a'}{max} \; q_* (s', a')} $$
+
+#### Solving the Bellman Optimality Equation
+
+- Bellman Optimality Equation is non-linear
+- No closed form solution (in general)
+- Many iterative solution methods
+  - Value Iteration
+  - Policy Iteration
+  - Q-learning
+  - Sarsa
+
+#### Extensions to MDPs
+
+- Infinite and continuous MDPs
+- Partially observable MDPs
+- Undiscounted, average reward MDPs
+
+##### Infinite MDPs
+
+The following extensions are all possible:
+
+- Countably infinite state and/or action spaces
+  - Straightforward
+- Continuous state and/or action spaces
+  - Closed form for linear quadratic model(LQR)
+- Continuous Time
+  - Requires partial differential equations
+  - Hamilton-Jaccobian-Bellman (HJB) equation
+  - Limiting case of Bellman equation as time-step $\rightarrow 0$
+
+##### POMDPs
+
+A Partially Observab;e Markov Decision Process is an MDP with hidden states. It is a hidden Markov model with actions.
+
+| Definition|
+|---|
+|A POMDP is a tuple $\mathcal{\langle S, A, \textcolor{red}{O}, P, R,\textcolor{red}{Z}, \gamma \rangle}$<br>$\bullet\;\; \mathcal{S}\;$ is a finite set of states<br>$\bullet\;\; \mathcal{A}\;$ is a finite set of actions<br>$\bullet\;\; \textcolor{red}{\mathcal{A}}\;$ is a finite set of observation<br>$\bullet\;\; \mathcal{P}\;$ is a state transition probability matrix<br>$$\quad\,\mathsf{\mathcal{P}^a_{ss'} = \mathbb{P} [S_{t+1} = s' \vert S_t = s, A_t = a] }$$<br>$\bullet\;\; \mathcal{R}\;$ is a reward function<br>$$\quad\,\mathsf{\mathcal{R}^a_s = \mathbb{E} [R_{t+1} \vert S_t = s, A_t = a] }$$<br>$\bullet\;\; \mathcal{\textcolor{red}{Z}}\;$ is an observation function<br>$$\quad\,\mathsf{\mathcal{Z}^a_{s'o} = \mathbb{P} [O_{t+1} = o \vert S_{t+1} = s', A_t = a] }$$<br>$\bullet\;\; \mathcal{\gamma}\;$ is a discount factor $\gamma \in [0, 1]$|
+
+##### Belief States
+
+A history $H_t$ is a sequence of actions, observations and rewards
+
+$$\mathsf{H_t = A_0, O_1, R_1, \dots , A_{t-1}, O_t, R_t}$$
+
+A belief state $b(h) is a probablity distribution over states, conditioned on the history h
+
+$$\mathsf{b(h) = (\mathbb{P} [ S_t = s^1 \vert H_t = h ], \dots , \mathbb{P}[S_t = s^n \vert H_t = h])}$$
+
+##### Reductinos of POMDPs
+
+- The history $\mathsf{H_t}$ satisfies the Markov property
+- The belief state $\mathsf{b(H_t)}$ satisfies the Markov property
+- A POMDP can be reduced to an (infinite) history tree
+- A POMDP can be reduced to an (infinite) belief state tree
+
+#### Ergodic Markov Process
+
+An ergodic Markov process is
+
+- Recurrent: each state is visted an infinite number of times
+- Aperiodic: each state is visited without any systematic period
+
+|Theorem|
+|---|
+|An ergodic Markov process has a limiting stationary distribution $\mathsf{d^{\pi}(s)}$ with the property<br><center>$$ \mathsf{d^{\pi} (s) = \displaystyle\sum_{s' \in S} d^{\pi} (s') \mathcal{P}_{s's}}$$</center>|
+
+#### Ergidic MDP
+
+|Definition|
+|---|
+| An MDP is ergodic if the Markov chain induced by any policy is ergodic|
+
+For any policy $\pi$, and ergodic MDP has an average reward per time-step $\rho ^{\pi}$ that is independent of start state.
+
+$$ \mathsf{\rho^{\pi} = \underset{T\rightarrow \infty}{lim} \; {1\over T}\mathbb{E} \left[\displaystyle\sum^T_{t=1} R_t\right]} $$
+
+#### Average Reward Value Function
+
+- The value function of an undiscounted, ergodic MDP can be expressed in terms of average reward.
+- $\mathsf{\tilde{v}_{\pi} (s)$ is the extra reward due to starting from state s,
+
+$$\mathsf{\tilde{v}_{\pi} (s) = \mathbb{E}_{\pi} \left[ \displaystyle\sum^{\infty}_{k=1} (R_{t+k} - \rho^{\pi})\;\vert\;S_t =s \right ]}$$
+
+There is a corresponding average reward Bellman equation,
+
+$$\mathsf{\tilde{v}_{\pi} (s) = \mathbb{E}_{\pi} \left[(R_{t+1} - \rho^{\pi}) + \displaystyle\sum^{\infty}_{k=1} (R_{t+k} - \rho^{\pi})\;\vert\;S_t =s \right ]}$$
+
+$$\quad\quad = \mathsf{\mathbb{E}_{\pi} \left[(R_{t+1} - \rho^{\pi}) + \tilde{v}_{\pi} (s+1)\;\vert\;S_t =s \right ]}$$
