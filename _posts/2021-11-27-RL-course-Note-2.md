@@ -15,7 +15,7 @@ Video Link :
 [![thumb1](/assets/pic/RL_lec2_thumb.JPG){: width="400px" height="200px"}](https://youtu.be/lfHX2hHRMVQ)
 {: .text-center}
 
-## 2강 소감 및 중요한 생각
+## 2강 소감 및 생각
 
 **결국 이렇게 정의된 MDP, Bellman equation을 푸는 것. 일반적인 모든 문제에서 Reward라는 것과 Action이라는 것으로 최대한 수학적으로 해를 구하기 쉽도록 학습 문제를 정의하기 위한 첫번째 단계인 듯하다. 최대한 Linear하게 만들고 싶은 것. 그러나 나는 AI 학습이 모든 것을 Linear하게 정의하려고 노력하는 것이 모든 상황을 커버할 수 있을지는 모르겠다. 물론 대부분의 수학적 접근은 Convolution과 Linear한 식의 combination으로 표현될 수 있다고 대충 느낌상 기억하고 있긴 하다만 그러면 Convolution과 Dense layer를 잘 구성해야 하며 수많은 Unrelated 변수가 생겨난다. 물론 그를 통해서 미처 파악하지 못한 변수를 이용해 추상적 접근을 모델링해내는 것이 가능할 수도 있다. 그러나 이 부분을 구현하기 위해서 Laplace transform과 거기서 표현되는 여러가지 수학적 접근을 구현할 수 있도록 Layer를 구현해야 할 것이다.**
 
