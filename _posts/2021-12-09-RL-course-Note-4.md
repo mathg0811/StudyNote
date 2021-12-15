@@ -1,5 +1,5 @@
 ---
-title: RLcourse note4 - Lecture 4 Model-Free Prediction
+title: RLcourse note - Lecture 4 Model-Free Prediction
 author: DS Jung
 date: 2021-12-09 21:20:00 +0900
 categories: [RLcourse, Note]
@@ -15,13 +15,13 @@ Video Link :
 [![thumb1](/assets/pic/RL_lec4_thumb.JPG){: width="400px" height="200px"}](https://youtu.be/PnHCvfgC_ZA)
 {: .text-center}
 
-## Introduction of Model-Free Reinforcement Learning
+## Introduction of Model-Free Prediction
 
 Estimate the Value function of an unknown MDP
 
 ### 4강 소감
 
-asfds
+Model Free Prediction의 시작으로 TD에 대해서 정리했다. 결국 MC나 그 외 여러가지 Prediction 방법 중 많이 쓰이게 되고 범용적으로 정리가 가능한 방법이 TD인데 수식이 많이 어렵지는 않지만 강의에서는 생략된 곳도 많은 것 같다. 이 부분은 차후 책으로 증명같은 부분을 검토할 필요가 있을 것도 같다. 사실 직관적으로는 당연하고 이해하기 너무 쉬운 부분이지만 그냥 넘어가면 찝찝하니까... 이해가 잘 되면 필요에 따라 활용할 방법도 늘어나는 법이니까. 슬슬 용어들이 혼용되거나 혼동을 주는 부분들이 있는데 이것도 헷갈리지 않도록 신경써야겠다
 
 ### Monte-Carlo Reinforcement Learning
 
@@ -129,7 +129,7 @@ $$ \mathsf{ V(S_t) \leftarrow V(S_t) +\alpha (R_{t+1} +\gamma V(S_t) - V(S_t))}$
 - Return $\mathsf{G_t = R_{t+1} + \gamma R_{t+2} + \dots + \gamma ^{T-1} R_T}$ is unbiased estimate of $\mathsf{v_\pi(S_t)}$
 - $\mathsf{v_\pi}$가 DP일 때랑 다른가? $\mathsf{G_t}$는 단일 episode에서의 return이고 최적 value와는 다른 값이 나올수 있을것같은데... episode마다 다를거같은데
 - True TD target $\mathsf{R_{t+1} + \gamma v-\pi(S_{t+1})}$ is unbiased estimate of $\mathsf{v_\pi(S_t)}$
-- 이것도 마찬가지... $v_\pi$는 TD target의 expectation이지 모든 episode에서 같아지는 건 아닐거 같은데... estimate라고 해도 말이 거꾸로 뒤집한거같고.. $\v_\pi$가 target의 estimate 아닌가
+- 이것도 마찬가지... $v_\pi$는 TD target의 expectation이지 모든 episode에서 같아지는 건 아닐거 같은데... estimate라고 해도 말이 거꾸로 뒤집한거같고.. $v_\pi$가 target의 estimate 아닌가
 - TD target  $\mathsf{R_{t+1} + \gamma V(S_{t+1})}$ is biased estimate of $\mathsf{v_\pi(S_t)}$
 - 수렴할 때 bias가 생기는 건 흔한 일이긴 한데 그 뜻 맞나
 - TD target is much lower variance than the return:

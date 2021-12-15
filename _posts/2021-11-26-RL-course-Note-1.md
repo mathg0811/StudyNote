@@ -1,5 +1,5 @@
 ---
-title: RLcourse note1 - Lecture 1 Introduction to Reinforcement Learning
+title: RLcourse note - Lecture 1 Introduction to Reinforcement Learning
 author: DS Jung
 date: 2021-11-26 16:00:00 +0900
 categories: [RLcourse, Note]

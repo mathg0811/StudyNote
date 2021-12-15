@@ -1,5 +1,5 @@
 ---
-title: RLcourse note3 - Lecture 3 Planning by Dynamic Programming
+title: RLcourse note - Lecture 3 Planning by Dynamic Programming
 author: DS Jung
 date: 2021-12-02 10:00:00 +0900
 categories: [RLcourse, Note]

@@ -1,5 +1,5 @@
 ---
-title: RLcourse note2 - Lecture 2 Markov Decision Processes
+title: RLcourse note - Lecture 2 Markov Decision Processes
 author: DS Jung
 date: 2021-11-27 10:00:00 +0900
 categories: [RLcourse, Note]
