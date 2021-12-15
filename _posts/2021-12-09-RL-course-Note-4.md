@@ -31,6 +31,8 @@ asfds
 - MC uses the simplest possible idea: value = mean return
 - Caveat: can only apply MC to episodic MDPs
   - All episodes must terminate
+- 각 에피소드가 완료된 후에 그 Reward로부터 학습을 진행한다. bootstrapping은 불가능하고 각 에피소드는 종료되어야 한다.
+- Expected return을 계산하는 것이 아닌 실제 반환되는 return으로 계산한다.
 
 ### First-Vist Monte-Carlo Policy Evaluation
 
@@ -40,7 +42,7 @@ $$ \mathsf{ S_1, A_1, R_2, \dots, S_k \sim \pi } $$
 
 - Monte-Carlo policy evaluation uses empirical mean return instead of expected return
 *- state s 를 최초로 visit한 time t만 사용한다.*
-- counter $\mathsf{N(s)}$ 세상에 뭔 counter가 입력변수를 가져 어이가 없네
+- counter $\mathsf{N(s)}$ state 별로 따로 counter를 가진다는 뜻, 각 state를 update 할 때 쓰기 위함
 - Total return $\mathsf{S(s) \leftarrow S(s) + G_t}$
 - Estimated Value by mean return $\mathsf{V(s) = S(s) /N}$
 - By law of large number, $\mathsf{V(s) \rightarrow v_\pi(s) \;as\; N \rightarrow \infty}$ V는 mean return이고 v는 state return인데 이것도 어이없네...
@@ -77,11 +79,13 @@ $$\begin{aligned}
 
 $$ \mathsf{V(S_t) \leftarrow V(S_t) + \frac{1}{N} (G_t - V(S_t))} $$
 
-S_t가 같은 s 를 의미해서 둘다 t로 쓴건 알겠지만 그러면 첫번째 줄이랑 t 정의가 안맞는다 수식 정말 좀....
+S_t 흠.... 그리고 S total return이랑 겹치네
 
 - In non-stationary problems, it can be useful to track a running mean, i.e. forget old episodes
 
 $$ \mathsf{V(S_t) \leftarrow V(S_t) + \alpha (G_t - V(S_t))} $$
+
+- 1/N 이 아니라 $\alpha$로 고정하는 경우 1/N보다 과거 정보 비중이 exponential로 줄어든다. 이것저것 해보는 느낌이군
 
 ## Temporal-Difference Learning
 
@@ -89,6 +93,7 @@ $$ \mathsf{V(S_t) \leftarrow V(S_t) + \alpha (G_t - V(S_t))} $$
 - TD is model-free: no knowledge of MDP transitions / rewards
 - TD learns from incomplete episodes, by *bootstrapping*
 - TD updates a guess towards a guess
+- 간단하게는 실시간으로 업데이트가 가능한 것도 장점이긴 하다 업데이트 방법을 다양하게 활용할 수 있는게 더 좋은듯
 
 ### MC and TD
 
@@ -117,14 +122,20 @@ $$ \mathsf{ V(S_t) \leftarrow V(S_t) +\alpha (R_{t+1} +\gamma V(S_t) - V(S_t))}$
   - TD works in continuing (non-terminating) environmnets
   - MC only works for episodic (terminating) environments
 
+장단점이라더니 다 TD 장점이네
+
 ### Bias/Variance Trade-Off
 
 - Return $\mathsf{G_t = R_{t+1} + \gamma R_{t+2} + \dots + \gamma ^{T-1} R_T}$ is unbiased estimate of $\mathsf{v_\pi(S_t)}$
+- $\mathsf{v_\pi}$가 DP일 때랑 다른가? $\mathsf{G_t}$는 단일 episode에서의 return이고 최적 value와는 다른 값이 나올수 있을것같은데... episode마다 다를거같은데
 - True TD target $\mathsf{R_{t+1} + \gamma v-\pi(S_{t+1})}$ is unbiased estimate of $\mathsf{v_\pi(S_t)}$
+- 이것도 마찬가지... $v_\pi$는 TD target의 expectation이지 모든 episode에서 같아지는 건 아닐거 같은데... estimate라고 해도 말이 거꾸로 뒤집한거같고.. $\v_\pi$가 target의 estimate 아닌가
 - TD target  $\mathsf{R_{t+1} + \gamma V(S_{t+1})}$ is biased estimate of $\mathsf{v_\pi(S_t)}$
+- 수렴할 때 bias가 생기는 건 흔한 일이긴 한데 그 뜻 맞나
 - TD target is much lower variance than the return:
   - Return depends on many random actions, transitions, rewards
   - TD target depends on one random action, transition, reward
+- return은 최종결과까지 다 고려하니까 variance가 큰 건 당연
 
 ### Advantages and Disadvantages of MC vs. TD 2
 
@@ -138,6 +149,7 @@ $$ \mathsf{ V(S_t) \leftarrow V(S_t) +\alpha (R_{t+1} +\gamma V(S_t) - V(S_t))}$
   - TD(0) converges to $\mathsf{v_\pi(s)}$
   - (but not always with function approximation)
   - More sensitive to initial value
+- MC와 결국 통하는거 같은데 왜 bias가 생기는 걸까
 
 ### Batch MC and TD
 
@@ -160,14 +172,12 @@ $$\begin{aligned}
   $$
    \displaystyle\sum^K_{k=1} \sum^{T_k}_{t=1}(G^k_t - V (s^k_t))^2
    $$
-  - In the AB example, $\mathsf{V(A) = 0}$
 - TD(0) converges to solution of max likelihood Markov model
   - Solution to the MDP $\mathcal{\langle S, A, \hat{P}, \hat{R}, \gamma \rangle}$ that best fits the data<br>
   $$\begin{aligned}
   \mathsf{\hat{\mathcal{P}}^a_{s,s'}} &= \mathsf{\frac{1}{N(s,a)} \displaystyle\sum^K_{k=1}\sum^{T_k}_{t=1}1(s^k_t, a^k_t, s^k_{t+1} = s, a, s')} \\
    \mathsf{\hat{\mathcal{R}}^a_s} &= \mathsf{\frac{1}{N(s,a)} \displaystyle\sum^K_{k=1}\sum^{T_k}_{t=1}1(s^k_t, a^k_t = s, a)r^k_t}
   \end{aligned}$$
-  - In the AB example, $\mathsf{V(A) = 0.75}$
 
 ### Advantages and Disadvantages of MC vs. TD 3
 
@@ -282,10 +292,13 @@ $$ \mathsf{V(s) \leftarrow V(s) + \alpha\delta _t} $$
 - When $\lambda =1$, credit is deferred until end of episode
 - Consider episodic environmnets with offline updates
 - Over the course of an episode, total update for TD(1) is the same as total update for MC
+- 이유가 생략되었는데 나중에 책봐야할듯
 
 |Theorem|
 |---|
 |The sum of offline updates is identical for forward-view and backward-view TD($\lambda$)<br><center>$$ \mathsf{\displaystyle\sum ^T_{t=1} \alpha\delta_t E_t(s) = \sum^T_{t=1} \alpha \left( G^\lambda_t - V(S_t)\right)1(S_t=s)} $$</center>|
+
+강의는 여기까지
 
 ### MC and TD(1)
 
@@ -334,14 +347,17 @@ For general $\lambda$, TD errors also telescope to $\lambda$-error, $\mathsf{G^\
 $$ \begin{aligned}
 \mathsf{G^\lambda _t - V(S_t) }=& \mathsf{-V(S_t) + (1-\lambda)\lambda^0(R_{t+1} + \gamma V(S_{t+1})) } \\
 & \quad\quad\quad\;\,\mathsf{+\, (1-\lambda)\lambda^1 (R_{t+1}+\gamma R_{t+2} + \gamma^2 V(S_{t+2})) } \\
+& \quad\quad\quad\;\,\mathsf{+\, (1-\lambda)\lambda^2 (R_{t+1}+\gamma R_{t+2}+\gamma^2 R_{t+3} + \gamma^3 V(S_{t+3})) } \\
 & \quad\quad\quad\;\,+\,\dots\\
 =& \mathsf{-V(S_t) + (\gamma\lambda)^0(R_{t+1} + \gamma V(S_{t+1}) -\gamma\lambda V(S_{t+1})) } \\
-& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^1 (R_{t+1}+ \gamma V(S_{t+2}) -\gamma\lambda V(S_{t+2})) } \\
+& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^1 (R_{t+2}+ \gamma V(S_{t+2}) -\gamma\lambda V(S_{t+2})) } \\
+& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^2 (R_{t+3}+ \gamma V(S_{t+3}) -\gamma\lambda V(S_{t+3})) } \\
 & \quad\quad\quad\;\,+\,\dots\\
 =& \quad\quad\quad\quad\;\, \mathsf{ (\gamma\lambda)^0(R_{t+1} + \gamma V(S_{t+1}) - V(S_t)) } \\
-& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^1 (R_{t+1}+ \gamma V(S_{t+2}) -V(S_{t+1})) } \\
+& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^1 (R_{t+2}+ \gamma V(S_{t+2}) -V(S_{t+1})) } \\
+& \quad\quad\quad\;\,\mathsf{+\, (\gamma\lambda)^2 (R_{t+3}+ \gamma V(S_{t+3}) -V(S_{t+2})) } \\
 & \quad\quad\quad\;\,+\,\dots\\
-=&\;\mathsf{\delta _t + \gamma\delta _{t+1} + \gamma\lambda)^2 \delta_{t+2} + \dots}
+=&\;\mathsf{\delta _t + \gamma\lambda\delta _{t+1} + (\gamma\lambda)^2 \delta_{t+2} + \dots}
 \end{aligned}$$
 
 ### Forward and Backwards TD($\lambda$)
@@ -356,7 +372,7 @@ $$ \begin{aligned}
 
 - Backward TD($\lambda$) updates accumulate error online
 
-$$ \mathsf{\displaystyle \sum^T_{t=1} \alpha\delta_t E_t(s) = \alpha \sum^T_{t=k} (\gamma\lambda)^{t-k}\delta_t = \alpha(G_k - V(S_k))} $$
+$$ \mathsf{\displaystyle \sum^T_{t=1} \alpha\delta_t E_t(s) = \alpha \sum^T_{t=k} (\gamma\lambda)^{t-k}\delta_t = \alpha(G^\lambda_k - V(S_k))} $$
 
 - By end of episode it accumulates total error for $\lambda$-return
 - For multiple visits to $\mathsf{s, E_t(s)}$ accumulates many errors
@@ -371,7 +387,7 @@ Offline updates
 Online updates
 
 - TD($\lambda$) updates are applied online at each step within episode
-- Forward and backward-view TD($\lmabda$) are slightly different
+- Forward and backward-view TD($\lambda$) are slightly different
 - NEW: Exact online TD($\lambda$) achieves perfect equivalene
 - By using a slightly different form of eligibility trace
 
