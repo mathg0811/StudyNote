@@ -270,7 +270,7 @@ $$ \mathsf{G^\lambda_t = (1-\lambda) \displaystyle\sum^\infty_{n=1} \lambda^{n-1
 - Update value $\mathsf{V(s)}$ for every state $\mathsf{s}$
 
 $$\begin{aligned}
-\delta_t &= \mathsf{R_{t+1} + \gamma V(S_{t+1} - V(S_t))}\\
+\delta_t &= \mathsf{R_{t+1} + \gamma V(S_{t+1}) - V(S_t)}\\
 \mathsf{V(s)} &\leftarrow V(s) + \alpha\delta _t E_t(s)
 \end{aligned}$$
 
