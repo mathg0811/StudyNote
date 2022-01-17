@@ -57,6 +57,7 @@ $$\begin{aligned}
 \mathsf{ R_{t+1} } &= \mathsf{ \mathcal{R}_\eta(R_{t+1}\;\vert\;S_t, A_t) }
 \end{aligned}$$
 
+
 - Typically assume conditional independence between state transitions and rewards
 
 $$ \mathsf{ \mathbb{P}[S_{t+1}, R_{t+1}\;\vert\;S_t, A_t] = \mathbb{P}[S_{t+1}\;\vert\;S_t, A_t]\mathbb{P}[R_{t+1}\;\vert\;S_t, A_t] } $$
