@@ -16,8 +16,7 @@ Video Link :
 {: .text-center}
 
 ### 9강 소감
-
-
+Exploration과 Exploitation을 밸런스를 맞추면서 학습하도록하는 몇가지 기법에 대한 내용인데 별로 중요하진 않은것같다..? 솔직히 몇가지 배웠어도 큰 성능차이가 나는 부분도 아니고 몇 가지 환경적 상황 변수를 파악하고 거기에 맞게 설계한다면 이런 문제는 훨씬 효율적이고 적합하게 해결될 수 있다. 몇개 내용설명이 미흡하여 따로 공부해볼까했지만 중요하지 않아보여서 패스
 
 ## Introduction
 
@@ -51,6 +50,8 @@ Exploration vs. Exploitation Dilemma
 - The environment generates a reward $r_t \sim \mathcal{R}^{a_t}$
 - The goal is to maximise cumulative reward $\sum^t_{\tau = 1} r_\tau$
 
+tuple에서 P를 빼놓고 내용에서는 정작 사용하고 있는 아이러니, state transition probability와 reward probability가 다를 수는 있지만 state에서 정의될 수 있는 부분이기도 하다. reward varation을 state에서 정의하지 못할 만한 경우가 있을까?
+
 ### Regret
 
 - The action-value is the mean reward for action a,
@@ -71,7 +72,7 @@ $$ \mathsf{ L_t = \mathbb{E} \left[ \displaystyle\sum^t_{\tau = 1 } V^* - Q(a_\t
 
 - Maximise cumulative reward $\equiv$ minimise total regret
 
-Optimal도 그냥 Q 쓰면되지 난데없이 왜 V야
+Optimal도 그냥 Q 쓰면되지 난데없이 왜 V야. mean action value는 따로 표시하면 되지 왜 똑같이 q를 쓰려고 하는가. 여기서 regret은 경우에 따라 minus인 경우도 생길 것이다. 근데 regret은 왜 Expected value인가. one step 이라면서 왜 expected야 짜증나게. Summation 해놓고 E 붙이는것도 마찬가지고
 
 #### Counting Regret
 
@@ -136,6 +137,8 @@ $$\mathsf{ \hat{Q}_t(a_t) = \hat{Q}_{t-1} + \frac{1}{N_t(a_t)}(r_t - \hat{Q}_{t-
 - $\Rightarrow$ greedy + optimistic initialisation has linear total regret
 - $\Rightarrow$ $\epsilon$-greedy + optimistic initialisation has linear total regret
 
+초기 Value를 높게 설정해두고 시작함으로써 Exploration이 저절로 일어나지만 여전히 suboptimal 수렴은 가능하다. 간단하지만 꽤 괜찮은 접근법
+
 #### Decating $\epsilon_t$-Greedy Algorithm
 
 - Pick a decay schedule for $\epsilon_1, \epsilon_2, \dots$
@@ -151,7 +154,7 @@ $$\begin{aligned}
 - Unfortunately, schedule requires advance knowledge of gaps
 - Goal: find an algorithm with sublinear regret for any multi-armed bandit (without knowledge of $\mathcal{R}$)
 
-gap에 대해 이해가 필요하다고 하는데 이정도 이해도 없으면 RL도 못한다고 보는게 맞지않을까 로또취급하면 안돼
+gap notation 또 엉망이다 action 끼리의 regret 차이라고 한다. 그리고 regret은 실제로 알수 없는 값이므로 이론적인 내용일뿐 아직 의미는 없다. 그냥 exploration이 decay해서 regret이 logarithmic 해지고 기회비용이 줄었을 뿐
 
 ### Lower Bound
 
@@ -162,6 +165,8 @@ gap에 대해 이해가 필요하다고 하는데 이정도 이해도 없으면 
 |Theorem (Lai and Robbins|
 |---|
 |Asymptotic total regret is at least logarithmic in number of steps<br><center>$$ \mathsf{ \underset{t\rightarrow\infty}{\lim}\; L_t \leq \log\, t \displaystyle\sum_{a\vert\Delta_a>0} \frac{\Delta_a}{KL(\mathcal{R}^a\Vert \mathcal{R}^{a^*})} } $$</center>|
+
+흠 상황과 모델을 만들기에 따라 극복 가능할것 같은 느낌도 있지만 굳이. 근데 이걸 왜 하는지 나오려나?
 
 ### Upper Confidence Bound
 
@@ -179,6 +184,8 @@ gap에 대해 이해가 필요하다고 하는데 이정도 이해도 없으면 
 - And more likely to pick another action
 - Until we home in on best action
 
+흠 충분히 data를 수집한 뒤에도 1번 그래프가 유지된다면 그래도 1번을 고를 것인가
+
 #### Upper Confidence Bounds
 
 - Estimate an upper confidence $\mathsf{\hat{U}_t(a)}$ for each action value
@@ -190,11 +197,13 @@ gap에 대해 이해가 필요하다고 하는데 이정도 이해도 없으면 
 
 $$\mathsf{ a_t = \underset{a\in\mathcal{A}}{argmax}\; \hat{Q}_t(a) + \hat{U}_t(a) }$$
 
+평균적인 reward 기대값이 큰 action이 아니라불확실성이 있는 action을 선택할 가능성을 높이기 위한 방법으로써 U를 사용하는 것.
+
 #### Hoeffding's Inequality
 
 |Theorem (Hoeffding's Inequality)|
 |---|
-|Let $$\mathsf{X_1,\dots ,X_t}$$ be i.i.d. random variables in [0,1], and let <br>$$\mathsf{ \bar{X}_t = \frac{1}{\tau} \sum^t_{\tau=1} X_\tau }$$  be the sample mean. Then<br><center>$$\mathsf{ \mathbb{P}[\mathbb{E}[X]>\bar{X}_t+u]\leq e^{-2tu^2} }$$</center>|
+|Let $$\mathsf{X_1,\dots ,X_t}$$ be i.i.d. random variables in [0,1], and let <br>$$\mathsf{ \bar{X}_t = \frac{1}{t}} \sum^t_{\tau=1} X_\tau }$$  be the sample mean. Then<br><center>$$\mathsf{ \mathbb{P}[\mathbb{E}[X]>\bar{X}_t+u]\leq e^{-2tu^2} }$$</center>|
 
 - We will apply Hoeffding's Inequality to rewards of the bandit
 - conditioned on selecting action a
@@ -225,6 +234,8 @@ $$\mathsf{ a_t = \underset{a\in\mathcal{A}}{argmax}\; Q(a) + \sqrt{\frac{2\log t
 |Theorem|
 |---|
 |The UCB algorithm achieves logarithmic asymtotic total regret<br><center>$$\mathsf{ \displaystyle\lim_{t\rightarrow\infty} L_t \leq 8\log t \displaystyle\sum_{a\vert\Delta_a>0} \Delta_a }$$</center>|
+
+UCB중 확률이 decay하는 $$t^{-4}$$를 사용하는 알고리즘
 
 ### Bayesisan Bandits
 
@@ -283,6 +294,8 @@ $$\begin{aligned}
 - Information gain is higher in uncertain situations
 - Therefor it makes sense to explore uncertain situations more
 - If we know value of information, we can trade-off exploration and exploitation optimally
+
+exploration은 거의 random하게 시행되지만 좀더 smart, logically efficient한 방법이 있지않을까, 여기서는 uncertatinty만 쫓아서 모든 tree를 검증하는 방향으로만 하고 있다.
 
 ### Information State Search
 
