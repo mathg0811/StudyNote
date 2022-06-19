@@ -41,3 +41,9 @@ Deep neural network $f_\theta$ with parameters $\theta$
 - Input : raw board representation $s$ of the position and its history
 - Output : probabilities and a value $(p ,v) = f_\theta(s)$
 - vector of move probabilities $p$ represents the probability of selecting each move $a$,$p_a = Pr(a\vert s)$
+- neural network consists of residual blocks of convolutional layers with batch normalization and rectifier nonlinearities
+
+- Train from self-play game
+- In each position $s$, an MCTS search is executed, guided by neural network $f_\theta$
+- MCTS search output probabilities $\pi$ of playing each move.
+- neural network parameters $\theta$ are updated to maximize the similarity of the policy vector $p_t$ to the search probabilities $\pi_t$ and to minimize the error between the predicted winner $v_t$ and the game winner $z$

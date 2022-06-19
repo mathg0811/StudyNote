@@ -1,8 +1,8 @@
 ---
-title: RL Model Test - Movenet Multiperson
+title: ML Model Test - Movenet Multiperson
 author: DS Jung
-date: 2022-02-07 16:00:00 +0900
-categories: [RL Model Test, Artificial Intelligence]
+date: 2022-02-22 16:00:00 +0900
+categories: [ML Model Test, Artificial Intelligence]
 tags: [reinforcementlearning, movenet, rl test]     # TAG names should always be lowercase
 comment: true
 math: true
